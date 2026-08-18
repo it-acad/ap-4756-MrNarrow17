@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}User List - Library{% endblock %}
+
+{% block content %}
+<!-- Header Row -->
+<div class="d-flex justify-content-between align-items-center mb-4 pt-2">
+    <h1 class="h2 page-title mb-0">
+        <i class="bi bi-people"></i> Users
+    </h1>
+    <span class="count-pill">
+        <i class="bi bi-people"></i> Total: {{ users|length }}
+    </span>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show shadow-lg border-0 mb-4" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<!-- Users Table Card -->
+<div class="card glossy-card overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-glossy align-middle mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td class="font-monospace small">
+                            <a href="{% url 'user:user' user.id %}" class="deco-link text-decoration-none" style="color: #818cf8;">
+                                #{{ user.id }}
+                            </a>
+                        </td>
+                        <td class="fw-semibold text-white">
+                            {{ user.first_name|default:"—" }}
+                        </td>
+                        <td class="fw-semibold text-white">
+                            {{ user.last_name|default:"—" }}
+                        </td>
+                        <td class="text-white fst-italic small">
+                            {% if user.email %}
+                                <i class="bi bi-envelope me-1 opacity-75"></i>{{ user.email }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-secondary">
+                            <i class="bi bi-people display-5 d-block mb-3" style="opacity: 0.4;"></i>
+                            <span class="fw-semibold d-block text-light mb-1">No users found</span>
+                            <span class="small">There are currently no registered users in the database.</span>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

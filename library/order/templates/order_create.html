@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Create Order - Library{% endblock %}
+
+{% block content %}
+<style>
+    .form-select-glossy {
+        background-color: #1e293b !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        color: #f8fafc !important;
+        border-radius: 0.5rem;
+        /* Forces browser native select dropdown popup to render in dark mode */
+        color-scheme: dark; 
+    }
+    .form-select-glossy:focus {
+        border-color: #818cf8 !important;
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.35) !important;
+    }
+    .form-select-glossy option {
+        background-color: #0f172a !important;
+        color: #f8fafc !important;
+    }
+    .info-box-glossy {
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(129, 140, 248, 0.25);
+        color: #a5b4fc;
+        border-radius: 0.5rem;
+    }
+</style>
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <!-- Header Row -->
+        <div class="d-flex justify-content-between align-items-center mb-4 pt-2">
+            <h1 class="h2 page-title mb-0">
+                <i class="bi bi-journal-plus"></i> Borrow a Book
+            </h1>
+            <a href="{% url 'book:book_list' %}" class="btn btn-glossy-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Back to Books
+            </a>
+        </div>
+
+        <!-- Form Card -->
+        <div class="card glossy-card">
+            <div class="card-body p-4">
+                <form method="post" action="{% url 'order:create_order' %}">
+                    {% csrf_token %}
+                    
+                    <!-- Book Selection Dropdown -->
+                    <div class="mb-4">
+                        <label for="book_id" class="form-label form-label-custom">SELECT BOOK</label>
+                        <select name="book_id" id="book_id" required class="form-select form-select-glossy py-2" data-bs-theme="dark">
+                            <option value="" disabled {% if not selected_book %}selected{% endif %}>-- Choose a book --</option>
+                            {% for book in books %}
+                                <option value="{{ book.id }}" {% if selected_book and book.id == selected_book.id %}selected{% endif %}>
+                                    {{ book.name }} (In Stock: {{ book.count }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Loan Information Box -->
+                    <div class="info-box-glossy p-3 mb-4 d-flex align-items-center gap-2">
+                        <i class="bi bi-info-circle fs-5"></i>
+                        <span class="small">Standard loan period is <strong class="text-white">14 days</strong> from today.</span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-glossy-primary w-100 py-2">
+                        <i class="bi bi-check-circle me-1"></i> Confirm Order
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

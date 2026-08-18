@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}My Orders - Library{% endblock %}
+
+{% block content %}
+<!-- Header Row -->
+<div class="d-flex justify-content-between align-items-center mb-4 pt-2">
+    <h1 class="h2 page-title mb-0">
+        <i class="bi bi-box-seam"></i> My Orders
+    </h1>
+    <span class="count-pill">
+        <i class="bi bi-box-seam"></i> Total: {{ orders|length }}
+    </span>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show shadow-lg border-0 mb-4" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<!-- Orders Table Card -->
+<div class="card glossy-card overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-glossy align-middle mb-0">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 70px;">ID</th>
+                    <th scope="col">Book</th>
+                    <th scope="col">Order Date</th>
+                    <th scope="col">Return By</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td class="text-white small fw-semibold">#{{ order.id }}</td>
+                        <td class="fw-semibold text-white">
+                            <i class="bi bi-journal-text me-2" style="color: #818cf8;"></i><a href="{% url 'book:book_detail' order.book.id %}" class="deco-link text-decoration-none">{{ order.book.name }}</a>
+                        </td>
+                        <td class="text-white">{{ order.created_at|date:"M d, Y" }}</td>
+                        <td class="text-white">{{ order.plated_end_at|date:"M d, Y" }}</td>
+                        <td>
+                            {% if order.end_at %}
+                                <span class="badge bg-secondary bg-opacity-25 text-light border border-secondary border-opacity-25 rounded-pill px-2.5 py-1.5 fw-normal">
+                                    <i class="bi bi-check2-all me-1 text-secondary"></i>Returned on {{ order.end_at|date:"M d, Y" }}
+                                </span>
+                            {% else %}
+                                <span class="badge badge-glossy-success rounded-pill px-2.5 py-1.5 fw-semibold">
+                                    <i class="bi bi-clock-history me-1"></i>Active
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-secondary">
+                            <i class="bi bi-inbox display-5 d-block mb-3" style="opacity: 0.4;"></i>
+                            <span class="fw-semibold d-block text-light mb-1">No orders found</span>
+                            <span class="small">You haven't ordered any books yet.</span>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

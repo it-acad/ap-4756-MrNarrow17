@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Library{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mb-5">
+    <div class="col-lg-10">
+        <div class="glossy-card p-5 text-center">
+            <h1 class="page-title justify-content-center mb-4" style="font-size: 2.5rem;">
+                <i class="bi bi-journal-bookmark-fill"></i>
+                Welcome to the Library
+            </h1>
+            <p class="lead mb-5" style="color: #cbd5e1;">
+                Browse our collection of books, borrow books, and explore new authors.
+            </p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{% url 'book:book_list' %}" class="btn btn-glossy-primary btn-lg d-flex align-items-center">
+                    <i class="bi bi-search me-2"></i> Browse Collection
+                </a>
+                {% if not request.user.is_authenticated %}
+                    <a href="{% url 'auth:login' %}" class="btn btn-glossy-secondary btn-lg d-flex align-items-center">
+                        <i class="bi bi-box-arrow-in-right me-2"></i> Login to Borrow
+                    </a>
+                {% else %}
+                    <a href="{% url 'user:list' %}" class="btn btn-glossy-secondary btn-lg d-flex align-items-center">
+                        <i class="bi bi-people"></i> Users
+                    </a>
+                    <a href="{% url 'order:my_orders' %}" class="btn btn-glossy-secondary btn-lg d-flex align-items-center">
+                        <i class="bi bi-box-seam me-2"></i> My Orders
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="glossy-card p-4 text-center h-100">
+            <div class="mb-3">
+                <i class="bi bi-book" style="font-size: 2.5rem; color: #818cf8; filter: drop-shadow(0 0 10px rgba(129, 140, 248, 0.4));"></i>
+            </div>
+            <h3 class="h5 mb-2" style="color: #f8fafc; font-weight: 600;">Large Collection</h3>
+            <p style="color: #94a3b8; font-size: 0.95rem; margin-bottom: 0;">Explore titles across various genres and disciplines.</p>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="glossy-card p-4 text-center h-100">
+            <div class="mb-3">
+                <i class="bi bi-pen" style="font-size: 2.5rem; color: #34d399; filter: drop-shadow(0 0 10px rgba(52, 211, 153, 0.4));"></i>
+            </div>
+            <h3 class="h5 mb-2" style="color: #f8fafc; font-weight: 600;">Various Authors</h3>
+            <p style="color: #94a3b8; font-size: 0.95rem; margin-bottom: 0;">Discover works from classic literary figures to contemporary writers.</p>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="glossy-card p-4 text-center h-100">
+            <div class="mb-3">
+                <i class="bi bi-clock-history" style="font-size: 2.5rem; color: #f472b6; filter: drop-shadow(0 0 10px rgba(244, 114, 182, 0.4));"></i>
+            </div>
+            <h3 class="h5 mb-2" style="color: #f8fafc; font-weight: 600;">Easy Borrowing</h3>
+            <p style="color: #94a3b8; font-size: 0.95rem; margin-bottom: 0;">Easily manage your active orders and borrowing history online.</p>
+        </div>
+    </div>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show shadow-lg border-0 mb-4" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+{% endblock %}

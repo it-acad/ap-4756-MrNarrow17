@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Registration{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center card glossy-card overflow-hidden">
+    <div class="card-body p-4">
+        <div class="card-body p-5">
+            <div class="d-flex justify-content-center align-items-center mb-4 pb-1">
+                <h1 class="page-title mb-0 fs-1">
+                    <i class="bi bi-person-plus"></i> Registration
+                </h1>
+            </div>
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <div class="row g-3 mb-3">
+                    <div>
+                        <h1 class="form-label form-label-custom">First Name</h1>
+                        <div class="input-group input-group-glossy">
+                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="first_name"
+                                name="first_name"
+                                value="{{ first_name }}"
+                            >
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="form-label form-label-custom">Last Name</h1>
+                        <div class="input-group input-group-glossy">
+                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="last_name"
+                                name="last_name"
+                                value="{{ last_name }}"
+                            >
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="form-label form-label-custom">Middle Name</h1>
+                        <div class="input-group input-group-glossy">
+                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="middle_name"
+                                name="middle_name"
+                                value="{{ middle_name }}"
+                            >
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="form-label form-label-custom">Email Address</h1>
+                        <div class="input-group input-group-glossy">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            <input
+                                type="email"
+                                class="form-control"
+                                id="email"
+                                name="email"
+                                value="{{ email }}"
+                                required
+                            >
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="form-label form-label-custom">Password</h1>
+                        <div class="input-group input-group-glossy">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="password"
+                                name="password"
+                                value="{{ password }}"
+                                required
+                            >
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 nav-link btn-auth-login d-flex justify-content-center align-items-center gap-2">
+                    <i class="bi bi-person-plus"></i>Register
+                </button>
+            </form>
+            
+            <div class="text-center mt-3">
+                <p class="text-white">Already have an account? <a href="{% url 'auth:login' %}" class="deco-link text-decoration-none">Login here</a></p>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show mt-3" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Library{% endblock %}</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --accent-color: #6366f1;
+            --accent-hover: #4f46e5;
+        }
+
+
+        @keyframes fadeOut {
+            to { 
+                opacity: 0; 
+                filter: blur(2px); 
+                transform: scale(0.99); 
+            }
+        }
+
+        @keyframes scaleIn {
+            from { 
+                opacity: 0; 
+                filter: blur(4px); 
+                transform: scale(0.96); 
+            }
+            to { 
+                opacity: 1; 
+                filter: blur(0); 
+                transform: scale(1); 
+            }
+        }
+
+        body {
+            background-color: #090d16;
+            color: #f1f5f9;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            min-height: 100vh;
+            overflow-y: scroll; 
+        }
+
+        main {
+            padding-top: 2.5rem;
+            padding-bottom: 3rem;
+        }
+
+        .navbar-custom {
+            background: rgba(15, 23, 42, 0.65) !important;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+            padding: 0.75rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.35rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+
+        .navbar-brand i {
+            -webkit-text-fill-color: initial;
+            color: #818cf8;
+            font-size: 1.4rem;
+            filter: drop-shadow(0 0 10px rgba(129, 140, 248, 0.4));
+        }
+
+        .navbar-custom .nav-link {
+            color: #94a3b8 !important;
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 0.5rem 0.85rem !important;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .navbar-custom .nav-link i {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .navbar-custom .nav-link:hover {
+            color: #ffffff !important;
+            background-color: rgba(255, 255, 255, 0.07);
+        }
+
+        .navbar-custom .nav-link:hover i {
+            opacity: 1;
+            transform: scale(1.15);
+        }
+
+        .staff-badge {
+            font-size: 0.65rem;
+            padding: 0.15rem 0.45rem;
+            border-radius: 10px;
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            border: 1px solid rgba(129, 140, 248, 0.35);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .btn-auth-login {
+            background-color: var(--accent-color);
+            color: #ffffff !important;
+            font-weight: 600;
+            padding: 0.45rem 1.1rem !important;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 14px rgba(99, 102, 241, 0.45);
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            border: none;
+        }
+        
+        .btn-auth-login:hover {
+            background-color: var(--accent-hover);
+            color: #ffffff !important;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.6);
+            transform: scale(1.04);
+        }
+
+        .btn-auth-logout {
+            color: #fca5a5 !important;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.1);
+            font-weight: 500;
+            padding: 0.45rem 0.95rem !important;
+            border-radius: 0.5rem;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
+        }
+
+        .btn-auth-logout:hover {
+            color: #ffffff !important; 
+            background-color: #ef4444 !important;
+            border-color: #ef4444 !important;
+            box-shadow: 0 4px 18px rgba(239, 68, 68, 0.4);
+            transform: scale(1.04);
+        }
+        
+        .page-title {
+            font-weight: 700;
+            font-size: 1.85rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .page-title i {
+            -webkit-text-fill-color: initial;
+            color: #818cf8;
+            filter: drop-shadow(0 0 10px rgba(129, 140, 248, 0.4));
+        }
+
+        .count-pill {
+            background: rgba(99, 102, 241, 0.12);
+            color: #a5b4fc;
+            border: 1px solid rgba(129, 140, 248, 0.3);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 12px rgba(99, 102, 241, 0.15);
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 0.4rem 0.95rem;
+            border-radius: 2rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .glossy-card {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 1rem;
+            box-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+        }
+        
+        .glossy-card:hover {
+            transform: scale(1.015);
+            box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.55), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+        }
+
+        .form-label-custom {
+            font-size: 0.725rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: #94a3b8;
+        }
+
+        .input-group-glossy {
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group-glossy:focus-within {
+            border-color: #818cf8;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+            transform: scale(1.01);
+        }
+        
+        .input-group-glossy .input-group-text {
+            background: rgba(30, 41, 59, 0.6);
+            border: none;
+            color: #94a3b8;
+            padding-left: 0.85rem;
+            padding-right: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .input-group-glossy .form-control {
+            background: rgba(30, 41, 59, 0.6);
+            border: none;
+            color: #f8fafc;
+            font-size: 0.95rem;
+            box-shadow: none !important;
+        }
+        
+        .input-group-glossy .form-control::placeholder {
+            color: #64748b;
+        }
+        
+        .input-group-glossy:focus-within .input-group-text {
+            color: #a5b4fc;
+        }
+
+        .btn-glossy-primary {
+            background-color: var(--accent-color);
+            color: #ffffff !important;
+            font-weight: 600;
+            padding: 0.45rem 1.1rem !important;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 14px rgba(99, 102, 241, 0.45);
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            border: none;
+        }
+
+        .btn-glossy-primary:hover {
+            background-color: var(--accent-hover);
+            color: #ffffff !important;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.6);
+            transform: scale(1.04);
+        }
+
+        .btn-glossy-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #cbd5e1 !important;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 0.5rem 1rem;
+            border-radius: 0.6rem;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-glossy-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: scale(1.04);
+        }
+
+        .action-btn {
+            padding: 0.38rem 0.7rem;
+            font-size: 0.825rem;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            text-decoration: none;
+        }
+        
+        .action-btn:hover {
+            transform: scale(1.06);
+        }
+
+        .action-btn-borrow {
+            color: #a5b4fc;
+            border: 1px solid rgba(129, 140, 248, 0.3);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .action-btn-borrow:hover {
+            background: #6366f1;
+            color: #ffffff;
+            border-color: #6366f1;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.5);
+        }
+
+        .action-btn-edit {
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .action-btn-edit:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 14px rgba(255, 255, 255, 0.1);
+        }
+
+        .action-btn-delete {
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .action-btn-delete:hover {
+            background: #ef4444;
+            color: #ffffff;
+            border-color: #ef4444;
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.5);
+        }
+
+        .table-glossy {
+            color: #cbd5e1;
+            --bs-table-bg: transparent;
+        }
+
+        .table-glossy thead {
+            background: rgba(15, 23, 42, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .table-glossy th {
+            font-size: 0.725rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #94a3b8;
+            font-weight: 700;
+            padding: 1rem 1.2rem;
+            border: none;
+        }
+
+        .table-glossy td {
+            padding: 1.1rem 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background-color 0.2s ease;
+        }
+
+        .table-glossy tbody tr {
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .table-glossy tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.045);
+        }
+
+        .deco-link {
+            color: #949ef7;
+            font-weight: 600;
+            transition: color 0.2s ease, text-shadow 0.2s ease;
+        }
+
+        .deco-link:hover {
+            color: #4d50f0;
+            text-shadow: 0 0 12px rgba(129, 140, 248, 0.5);
+        }
+
+        .badge-glossy-success {
+            background: rgba(16, 185, 129, 0.12);
+            color: #34d399;
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
+        }
+
+        .badge-glossy-danger {
+            background: rgba(239, 68, 68, 0.12);
+            color: #f87171;
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.15);
+        }
+
+        .author-tag {
+            background: rgba(255, 255, 255, 0.05);
+            color: #cbd5e1;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 500;
+            font-size: 0.78rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 0.4rem;
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top navbar-custom">
+        <div class="container">
+            <a class="navbar-brand me-4" href="{% url 'home' %}">
+                <i class="bi bi-journal-bookmark-fill"></i>
+                <span>Library</span>
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1 ">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'book:book_list' %}">
+                            <i class="bi bi-book"></i> Books
+                        </a>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'order:my_orders' %}">
+                                <i class="bi bi-box-seam"></i> My Orders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'user:list' %}">
+                                <i class="bi bi-people"></i> Users
+                            </a>
+                        </li>
+                        {% if request.user.is_staff or request.user.is_superuser %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'author:list' %}">
+                                    <i class="bi bi-pen"></i> Authors <span class="staff-badge ms-1">ADMIN</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'order:all_orders' %}">
+                                    <i class="bi bi-boxes"></i> All Orders <span class="staff-badge ms-1">ADMIN</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+                
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
+                    {% if not request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a href="{% url 'auth:login' %}" class="btn-auth-login">
+                                <i class="bi bi-box-arrow-in-right"></i> Login
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link btn-auth-logout" href="{% url 'auth:logout' %}">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% block content %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show shadow-sm border-0" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endblock %}
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
